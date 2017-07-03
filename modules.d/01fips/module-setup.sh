@@ -55,8 +55,13 @@ install() {
         .libgcrypt.so.20.hmac \
         libfreeblpriv3.so libfreeblpriv3.chk
 
-    inst_simple /usr/lib64/libkcapi/.fipscheck.hmac
-    inst_simple /usr/lib64/libkcapi/fipscheck
+    if [ -f /usr/lib64/libkcapi/.fipscheck.hmac ]; then
+        inst_simple /usr/lib64/libkcapi/.fipscheck.hmac
+        inst_simple /usr/lib64/libkcapi/fipscheck
+    else
+        inst_simple /usr/lib64/libkcapi/.fipscheck.hmac
+        inst_simple /usr/lib64/libkcapi/fipscheck
+    fi
 
     # we do not use prelink at SUSE
     #inst_multiple -o prelink
