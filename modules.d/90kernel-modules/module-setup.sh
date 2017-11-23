@@ -61,6 +61,7 @@ installkernel() {
                 "=drivers/rtc" \
                 "=drivers/usb/host" \
                 "=drivers/usb/phy" \
+		"axp20x-rsb"
                 ${NULL}
         fi
 
