@@ -199,12 +199,20 @@ setup_net() {
         read layer2 < /sys/class/net/$netif/device/layer2
     fi
 
-    if ! which arping > /dev/null 2>&1 ; then
-        layer2=0
-    fi
-
     if [ "$layer2" != "0" ] && [ -n "$dest" ] && ! strstr "$dest" ":"; then
-        arping -q -f -w 60 -I $netif $dest || info "Resolving $dest via ARP on $netif failed"
+        ### This will not work, waiting for missing remote arping implementation
+        wicked arp --quiet --verify 2 --notify 0 $netif $dest
+        case "$?" in
+            1)
+                info "$netif does not support ARP, cannot attempt to resolve $dest."
+                ;;
+            4)
+                # ARP successful and address found, all is well
+                ;;
+            *)
+                info "Resolving $dest via ARP on $netif failed"
+                ;;
+        esac
     fi
     unset layer2
 

@@ -214,9 +214,9 @@ do_dhcp() {
         else
             ipv6_mode="managed"
         fi
-        dhclient="wickedd-dhcp6 --test --test-mode $ipv6_mode"
+        dhclient="wicked test dhcp6 --mode $ipv6_mode"
     else
-        dhclient="wickedd-dhcp4 --test"
+        dhclient="wicked test dhcp4"
     fi
 
     if ! linkup $netif; then
@@ -329,10 +329,18 @@ if strglobin $ip '*:*:*'; then
         wait_for_ipv6_dad $netif
         [ "$gw" = "::" ] && gw=""
     else
-        if which arping > /dev/null 2>&1 -a ! arping -f -q -D -c 2 -I $netif $ip; then
-            warn "Duplicate address detected for $ip for interface $netif."
-            return 1
-        fi
+        wicked arp --quiet --verify 3 --interval 1000 $netif $ip
+        case "$?" in
+            1)
+                info "$netif does not support ARP, cannot attempt to resolve $dest."
+                ;;
+            4)
+                warn "Duplicate address detected for $ip for interface $netif."
+                return 1
+                ;;
+            *)
+                ;;
+        esac
         # Assume /24 prefix for IPv4
         [ -z "$prefix" ] && prefix=24
         ip addr add $ip/$prefix ${srv:+peer $srv} brd + dev $netif
