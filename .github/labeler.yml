@@ -12,10 +12,10 @@ dracut-install:
   - install/*
   - install/**/*
 
-example:
-  - examples/*
-  - examples/**/*
-  - examples/**/**/*
+contrib:
+  - contrib/*
+  - contrib/**/*
+  - contrib/**/**/*
 
 modules:
   - modules.d/*
