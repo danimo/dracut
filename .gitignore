@@ -1,11 +1,10 @@
 /Makefile.inc
-/dracut.8
-/dracut-catimages.8
-/dracut.conf.5
 /dracut.conf.d/*.conf
-/dracut-gencmdline.8
-/dracut.html
-/dracut.kernel.7
+/doc/*.1
+/doc/*.5
+/doc/*.8
+/doc/*.7
+/doc/dracut.html
 /dracut.pc
 /dracut-install
 /modules.d/99base/switch_root

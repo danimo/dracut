@@ -22,18 +22,18 @@ CFLAGS ?= -O2 -g -Wall -std=gnu99 -D_FILE_OFFSET_BITS=64 -Wformat -Werror=format
 bashcompletiondir ?= ${datadir}/bash-completion/completions
 pkgconfigdatadir ?= $(datadir)/pkgconfig
 
-man1pages = lsinitrd.1
+man1pages = doc/lsinitrd.1
 
-man5pages = dracut.conf.5
+man5pages = doc/dracut.conf.5
 
-man7pages = dracut.cmdline.7 \
-            dracut.bootup.7 \
-            dracut.modules.7
+man7pages = doc/dracut.cmdline.7 \
+            doc/dracut.bootup.7 \
+            doc/dracut.modules.7
 
-man8pages = dracut.8 \
-            dracut-catimages.8 \
-            mkinitrd.8 \
-            mkinitrd-suse.8 \
+man8pages = doc/dracut.8 \
+            doc/dracut-catimages.8 \
+            doc/mkinitrd.8 \
+            doc/mkinitrd-suse.8 \
             modules.d/98dracut-systemd/dracut-cmdline.service.8 \
             modules.d/98dracut-systemd/dracut-initqueue.service.8 \
             modules.d/98dracut-systemd/dracut-mount.service.8 \
@@ -87,7 +87,7 @@ indent:
 	indent -i8 -nut -br -linux -l120 install/dracut-install.c
 	indent -i8 -nut -br -linux -l120 skipcpio/skipcpio.c
 
-doc: $(manpages) dracut.html
+doc: $(manpages) doc/dracut.html
 
 ifneq ($(enable_documentation),no)
 all: doc
@@ -101,20 +101,20 @@ endif
 	@rm -f -- "$@"
 	asciidoc -a "version=$(DRACUT_FULL_VERSION)" -d manpage -b docbook -o "$@" $<
 
-dracut.8: dracut.usage.asc dracut.8.asc
+doc/dracut.8: doc/dracut.usage.asc doc/dracut.8.asc
 
-dracut.html: dracut.asc $(manpages) dracut.css dracut.usage.asc
-	@rm -f -- dracut.xml
+doc/dracut.html: doc/dracut.asc $(manpages) doc/dracut.css doc/dracut.usage.asc
+	@rm -f -- doc/dracut.xml
 	asciidoc -a "mainversion=$(DRACUT_MAIN_VERSION)" \
 		-a "version=$(DRACUT_FULL_VERSION)" \
 		-a numbered \
-		-d book -b docbook -o dracut.xml dracut.asc
-	@rm -f -- dracut.html
-	xsltproc -o dracut.html --xinclude -nonet \
+		-d book -b docbook -o doc/dracut.xml doc/dracut.asc
+	@rm -f -- doc/dracut.html
+	xsltproc -o doc/dracut.html --xinclude -nonet \
 		--stringparam custom.css.source dracut.css \
 		--stringparam generate.css.header 1 \
-		http://docbook.sourceforge.net/release/xsl/current/xhtml/docbook.xsl dracut.xml
-	@rm -f -- dracut.xml
+		http://docbook.sourceforge.net/release/xsl/current/xhtml/docbook.xsl doc/dracut.xml
+	@rm -f -- doc/dracut.xml
 
 dracut.pc: Makefile.inc Makefile
 	@echo "Name: dracut" > dracut.pc
